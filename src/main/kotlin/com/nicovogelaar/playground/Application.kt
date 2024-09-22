@@ -1,6 +1,5 @@
-import com.nicovogelaar.playground.DatabaseConfig
-import com.nicovogelaar.playground.SecurityConfig
-import com.nicovogelaar.playground.ServerApplicationConfig
+package com.nicovogelaar.playground
+
 import org.springframework.boot.SpringBootConfiguration
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.runApplication
