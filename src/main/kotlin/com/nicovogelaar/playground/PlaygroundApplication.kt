@@ -7,12 +7,12 @@ import org.springframework.context.annotation.Import
 
 @SpringBootConfiguration
 @Import(
-	ServerApplicationConfig::class,
-	SecurityConfig::class,
+    ServerApplicationConfig::class,
+    SecurityConfig::class,
 )
 @EnableAutoConfiguration
 class PlaygroundApplication
 
 fun main(args: Array<String>) {
-	SpringApplication.run(PlaygroundApplication::class.java, *args)
+    SpringApplication.run(PlaygroundApplication::class.java, *args)
 }

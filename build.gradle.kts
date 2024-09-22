@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version "1.9.25"
     id("org.springframework.boot") version "3.3.4"
     id("io.spring.dependency-management") version "1.1.6"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
 group = "com.nicovogelaar"
@@ -37,6 +38,12 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xjsr305=strict")
     }
+}
+
+ktlint {
+    android.set(false)
+    outputColorName.set("BLUE")
+    enableExperimentalRules.set(true)
 }
 
 tasks.named<Test>("test") {
