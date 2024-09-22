@@ -2,15 +2,14 @@ import com.nicovogelaar.playground.model.Pet
 import com.nicovogelaar.playground.persistence.InMemoryPetRepository
 import com.nicovogelaar.playground.persistence.InMemoryStoreRepository
 import com.nicovogelaar.playground.service.StoreService
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
 class StoreServiceTest {
-
     private lateinit var storeRepo: InMemoryStoreRepository
     private lateinit var petRepo: InMemoryPetRepository
     private lateinit var storeService: StoreService

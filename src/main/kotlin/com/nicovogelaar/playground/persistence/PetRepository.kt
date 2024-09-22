@@ -110,14 +110,15 @@ class InMemoryPetRepository : PetReadRepository, PetWriteRepository {
     private val pets = mutableListOf<PetEntity>()
 
     override fun createPet(pet: Pet): Pet? {
-        val newPet = PetEntity(
-            id = pet.id,
-            name = pet.name,
-            category = pet.category,
-            status = pet.status,
-            createdAt = LocalDateTime.now(),
-            updatedAt = LocalDateTime.now()
-        )
+        val newPet =
+            PetEntity(
+                id = pet.id,
+                name = pet.name,
+                category = pet.category,
+                status = pet.status,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now(),
+            )
 
         pets.add(newPet)
         return newPet.toPet()
@@ -128,12 +129,13 @@ class InMemoryPetRepository : PetReadRepository, PetWriteRepository {
         pet: Pet,
     ): Pet? {
         val existingPetEntity = pets.find { it.id == id } ?: return null
-        val updatedPet = existingPetEntity.copy(
-            name = pet.name,
-            category = pet.category,
-            status = pet.status,
-            updatedAt = LocalDateTime.now()
-        )
+        val updatedPet =
+            existingPetEntity.copy(
+                name = pet.name,
+                category = pet.category,
+                status = pet.status,
+                updatedAt = LocalDateTime.now(),
+            )
 
         pets[pets.indexOf(existingPetEntity)] = updatedPet
         return updatedPet.toPet()
@@ -166,6 +168,6 @@ private fun PetEntity.toPet(): Pet {
         id = this.id,
         name = this.name,
         category = this.category,
-        status = this.status
+        status = this.status,
     )
 }

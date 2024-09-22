@@ -148,37 +148,45 @@ class InMemoryStoreRepository : StoreRepository {
     private val storePets = mutableMapOf<UUID, MutableList<UUID>>()
 
     override fun createStore(store: Store): Store? {
-        val newStore = StoreEntity(
-            id = store.id,
-            name = store.name,
-            location = store.location,
-            createdAt = LocalDateTime.now(),
-            updatedAt = LocalDateTime.now()
-        )
+        val newStore =
+            StoreEntity(
+                id = store.id,
+                name = store.name,
+                location = store.location,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now(),
+            )
         stores.add(newStore)
         return newStore.toStore()
     }
 
-    override fun updateStore(id: UUID, store: Store): Store? {
+    override fun updateStore(
+        id: UUID,
+        store: Store,
+    ): Store? {
         val existingStoreEntity = stores.find { it.id == id } ?: return null
-        val updatedStore = existingStoreEntity.copy(
-            name = store.name,
-            location = store.location,
-            updatedAt = LocalDateTime.now()
-        )
+        val updatedStore =
+            existingStoreEntity.copy(
+                name = store.name,
+                location = store.location,
+                updatedAt = LocalDateTime.now(),
+            )
         stores[stores.indexOf(existingStoreEntity)] = updatedStore
         return updatedStore.toStore()
     }
 
     override fun getStoreById(id: UUID): Store? {
-        return stores.find { it.id == id }?.let { it.toStore() }
+        return stores.find { it.id == id }?.toStore()
     }
 
     override fun getAllStores(): List<Store> {
         return stores.map { it.toStore() }
     }
 
-    override fun addPetToStore(storeId: UUID, petId: UUID): Boolean {
+    override fun addPetToStore(
+        storeId: UUID,
+        petId: UUID,
+    ): Boolean {
         return if (storePets[storeId]?.contains(petId) == true) {
             false
         } else {
@@ -187,7 +195,10 @@ class InMemoryStoreRepository : StoreRepository {
         }
     }
 
-    override fun removePetFromStore(storeId: UUID, petId: UUID): Boolean {
+    override fun removePetFromStore(
+        storeId: UUID,
+        petId: UUID,
+    ): Boolean {
         return storePets[storeId]?.remove(petId) ?: false
     }
 
@@ -196,12 +207,12 @@ class InMemoryStoreRepository : StoreRepository {
     }
 }
 
-data class StoreEntity (
+data class StoreEntity(
     val id: UUID,
     val name: String,
     val location: String,
     val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val updatedAt: LocalDateTime,
 )
 
 private fun StoreEntity.toStore(): Store {
