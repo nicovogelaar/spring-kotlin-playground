@@ -1,11 +1,5 @@
 # spring-kotlin-playground
 
-## Lint
-
-```shell
-./gradlew ktlintFormat
-```
-
 ## Create Pet
 
 ```shell
