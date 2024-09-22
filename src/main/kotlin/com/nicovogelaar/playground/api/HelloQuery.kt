@@ -5,7 +5,7 @@ import com.expediagroup.graphql.server.operations.Query
 import org.springframework.stereotype.Component
 
 @Component
-class PlaygroundQuery : Query {
+class HelloQuery : Query {
     @GraphQLDescription("Hello")
     fun hello(): String {
         return "Hello, GraphQL!"

@@ -20,6 +20,10 @@ repositories {
 }
 
 val graphqlVersion = "7.1.5"
+val exposedVersion = "0.54.0"
+val postgresVersion = "42.7.4"
+val h2Version = "2.3.232"
+val jodaVersion = "2.13.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -28,6 +32,14 @@ dependencies {
     implementation("com.expediagroup:graphql-kotlin-spring-server:$graphqlVersion")
     implementation("com.expediagroup:graphql-kotlin-hooks-provider:$graphqlVersion")
     implementation("com.expediagroup:graphql-kotlin-schema-generator:$graphqlVersion")
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
+    implementation("joda-time:joda-time:$jodaVersion")
+    implementation("org.postgresql:postgresql:$postgresVersion")
+    implementation("com.h2database:h2:$h2Version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

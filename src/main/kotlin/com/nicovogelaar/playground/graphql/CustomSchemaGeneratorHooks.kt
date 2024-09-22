@@ -6,7 +6,12 @@ import graphql.GraphQLContext
 import graphql.execution.CoercedVariables
 import graphql.language.StringValue
 import graphql.language.Value
-import graphql.schema.*
+import graphql.schema.Coercing
+import graphql.schema.CoercingParseLiteralException
+import graphql.schema.CoercingParseValueException
+import graphql.schema.CoercingSerializeException
+import graphql.schema.GraphQLScalarType
+import graphql.schema.GraphQLType
 import org.springframework.beans.factory.BeanFactoryAware
 import reactor.core.publisher.Mono
 import java.util.Locale
@@ -20,23 +25,24 @@ import kotlin.reflect.full.isSubclassOf
  * Schema generator hook that adds additional scalar types.
  */
 class CustomSchemaGeneratorHooks(override val wiringFactory: KotlinDirectiveWiringFactory) : SchemaGeneratorHooks {
-
     /**
      * Register additional GraphQL scalar types.
      */
-    override fun willGenerateGraphQLType(type: KType): GraphQLType? = when (type.classifier) {
-        UUID::class -> graphqlUUIDType
-        else -> super.willGenerateGraphQLType(type)
-    }
+    override fun willGenerateGraphQLType(type: KType): GraphQLType? =
+        when (type.classifier) {
+            UUID::class -> graphqlUUIDType
+            else -> super.willGenerateGraphQLType(type)
+        }
 
     /**
      * Register Reactor Mono monad type.
      */
-    override fun willResolveMonad(type: KType): KType = when (type.classifier) {
-        Mono::class -> type.arguments.first().type ?: type
-        Set::class -> List::class.createType(type.arguments)
-        else -> type
-    }
+    override fun willResolveMonad(type: KType): KType =
+        when (type.classifier) {
+            Mono::class -> type.arguments.first().type ?: type
+            Set::class -> List::class.createType(type.arguments)
+            else -> type
+        }
 
     /**
      * Exclude the Spring bean factory interface
@@ -49,21 +55,31 @@ class CustomSchemaGeneratorHooks(override val wiringFactory: KotlinDirectiveWiri
     }
 }
 
-internal val graphqlUUIDType = GraphQLScalarType.newScalar()
-    .name("UUID")
-    .description("A type representing a formatted java.util.UUID")
-    .coercing(UUIDCoercing)
-    .build()
+internal val graphqlUUIDType =
+    GraphQLScalarType.newScalar()
+        .name("UUID")
+        .description("A type representing a formatted java.util.UUID")
+        .coercing(UUIDCoercing)
+        .build()
 
 private object UUIDCoercing : Coercing<UUID, String> {
-    override fun parseValue(input: Any, graphQLContext: GraphQLContext, locale: Locale): UUID =
+    override fun parseValue(
+        input: Any,
+        graphQLContext: GraphQLContext,
+        locale: Locale,
+    ): UUID =
         runCatching {
             UUID.fromString(serialize(input, graphQLContext, locale))
         }.getOrElse {
             throw CoercingParseValueException("Expected valid UUID but was $input")
         }
 
-    override fun parseLiteral(input: Value<*>, variables: CoercedVariables, graphQLContext: GraphQLContext, locale: Locale): UUID {
+    override fun parseLiteral(
+        input: Value<*>,
+        variables: CoercedVariables,
+        graphQLContext: GraphQLContext,
+        locale: Locale,
+    ): UUID {
         val uuidString = (input as? StringValue)?.value
         return runCatching {
             UUID.fromString(uuidString)
@@ -72,7 +88,11 @@ private object UUIDCoercing : Coercing<UUID, String> {
         }
     }
 
-    override fun serialize(dataFetcherResult: Any, graphQLContext: GraphQLContext, locale: Locale): String =
+    override fun serialize(
+        dataFetcherResult: Any,
+        graphQLContext: GraphQLContext,
+        locale: Locale,
+    ): String =
         runCatching {
             dataFetcherResult.toString()
         }.getOrElse {

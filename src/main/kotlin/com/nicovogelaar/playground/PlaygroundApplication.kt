@@ -1,3 +1,4 @@
+import com.nicovogelaar.playground.Database
 import com.nicovogelaar.playground.SecurityConfig
 import com.nicovogelaar.playground.ServerApplicationConfig
 import org.springframework.boot.SpringApplication
@@ -16,5 +17,7 @@ import org.springframework.context.annotation.Import
 class PlaygroundApplication
 
 fun main(args: Array<String>) {
+    Database.connect()
+    Database.createTables()
     SpringApplication.run(PlaygroundApplication::class.java, *args)
 }
