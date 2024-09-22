@@ -1,5 +1,6 @@
 package com.nicovogelaar.playground.service
 
+import com.nicovogelaar.playground.model.Order
 import com.nicovogelaar.playground.model.Pet
 import com.nicovogelaar.playground.persistence.inmemory.InMemoryPetRepository
 import com.nicovogelaar.playground.persistence.inmemory.InMemoryStoreRepository
@@ -50,5 +51,30 @@ class StoreServiceTest {
         val allStores = storeService.listStores()
         assertEquals(1, allStores.size)
         assertEquals(allStores.first().id, createdStore.id)
+    }
+
+    @Test
+    fun `should place order and remove pet from store`() {
+        // Given
+        val petId = UUID.randomUUID()
+        val pet = Pet(id = petId, name = "Buddy", category = "Dog", status = "Available")
+        petRepo.createPet(pet)
+
+        val createdStore = storeService.createStore("Pet Store", "123 Main St")
+        assertNotNull(createdStore) { "Store creation failed" }
+
+        storeService.addPetToStore(createdStore!!, pet)
+
+        // When
+        val order = Order(store = createdStore, pet = pet)
+        val orderPlaced = storeService.placeOrder(order)
+
+        // Then
+        assertTrue(orderPlaced, "Order should be placed successfully")
+
+        // Verify the pet is removed from the store's inventory
+        val updatedStore = storeService.getStoreById(createdStore.id)
+        assertNotNull(updatedStore)
+        assertTrue(updatedStore?.inventory?.none { it.id == petId } == true, "Pet should be removed from inventory")
     }
 }

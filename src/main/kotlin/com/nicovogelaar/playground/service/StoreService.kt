@@ -1,5 +1,6 @@
 package com.nicovogelaar.playground.service
 
+import com.nicovogelaar.playground.model.Order
 import com.nicovogelaar.playground.model.Pet
 import com.nicovogelaar.playground.model.Store
 import com.nicovogelaar.playground.persistence.PetReadRepository
@@ -37,18 +38,16 @@ interface StoreUpdater {
     ): Store?
 }
 
+interface OrderPlacer {
+    fun placeOrder(order: Order): Boolean
+}
+
 @Service
 class StoreService(
     private val storeRepo: StoreRepository,
     private val petRepo: PetReadRepository,
-) : StoreGetter, StoreCreator, StoreUpdater {
-    override fun getStoreById(id: UUID): Store? =
-        storeRepo.getStoreById(id)
-            ?.let { store ->
-                storeRepo.getPetIdsForStore(id)
-                    .let { petIds -> petRepo.getPetsByIds(petIds) }
-                    .let { pets -> store.copy(inventory = pets) }
-            }
+) : StoreGetter, StoreCreator, StoreUpdater, OrderPlacer {
+    override fun getStoreById(id: UUID): Store? = storeRepo.getStoreById(id)?.copy(inventory = getInventoryForStore(id))
 
     override fun listStores(): List<Store> {
         val stores = storeRepo.getAllStores()
@@ -106,5 +105,21 @@ class StoreService(
         storeRepo.removePetFromStore(store.id, pet.id)
 
         return getStoreById(store.id)
+    }
+
+    override fun placeOrder(order: Order): Boolean {
+        val inventory = getInventoryForStore(order.store.id)
+
+        if (!inventory.any { it.id == order.pet.id }) {
+            return false
+        }
+
+        removePetFromStore(order.store, order.pet)
+        return true
+    }
+
+    private fun getInventoryForStore(storeId: UUID): List<Pet> {
+        val petIds = storeRepo.getPetIdsForStore(storeId)
+        return petRepo.getPetsByIds(petIds)
     }
 }

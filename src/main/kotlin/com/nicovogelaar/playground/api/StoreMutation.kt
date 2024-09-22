@@ -6,6 +6,8 @@ import com.nicovogelaar.playground.api.mapper.StoreMapper
 import com.nicovogelaar.playground.api.model.Store
 import com.nicovogelaar.playground.api.model.StoreCreate
 import com.nicovogelaar.playground.api.model.StoreUpdate
+import com.nicovogelaar.playground.model.Order
+import com.nicovogelaar.playground.service.OrderPlacer
 import com.nicovogelaar.playground.service.PetGetter
 import com.nicovogelaar.playground.service.StoreCreator
 import com.nicovogelaar.playground.service.StoreGetter
@@ -18,6 +20,7 @@ class StoreMutation(
     private val storeGetter: StoreGetter,
     private val storeCreator: StoreCreator,
     private val storeUpdater: StoreUpdater,
+    private val orderPlacer: OrderPlacer,
     private val petGetter: PetGetter,
 ) : Mutation {
     @GraphQLDescription("Create a new store")
@@ -52,5 +55,16 @@ class StoreMutation(
         val store = storeGetter.getStoreById(storeId) ?: return null
         val pet = petGetter.getPetById(petId) ?: return null
         return storeUpdater.removePetFromStore(store, pet)?.let { StoreMapper.toApiStore(it) }
+    }
+
+    @GraphQLDescription("Place an order for a pet in a store")
+    fun placeOrder(
+        storeId: UUID,
+        petId: UUID,
+    ): Boolean {
+        val store = storeGetter.getStoreById(storeId) ?: return false
+        val pet = petGetter.getPetById(petId) ?: return false
+        val order = Order(store, pet)
+        return orderPlacer.placeOrder(order)
     }
 }
