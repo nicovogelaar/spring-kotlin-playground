@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.runApplication
 import org.springframework.context.ConfigurableApplicationContext
 
-class ApplicationTests {
+class ApplicationTest {
     @Test
     fun `application context can start and stop`() {
         val context: ConfigurableApplicationContext =

@@ -40,13 +40,13 @@ interface StoreUpdater {
 @Service
 class StoreService(
     private val storeRepo: StoreRepository,
-    private val petReadRepo: PetReadRepository,
+    private val petRepo: PetReadRepository,
 ) : StoreGetter, StoreCreator, StoreUpdater {
     override fun getStoreById(id: UUID): Store? =
-        storeRepo.getStoreById(id) // Fetch the store
+        storeRepo.getStoreById(id)
             ?.let { store ->
                 storeRepo.getPetIdsForStore(id)
-                    .let { petIds -> petReadRepo.getPetsByIds(petIds) }
+                    .let { petIds -> petRepo.getPetsByIds(petIds) }
                     .let { pets -> store.copy(inventory = pets) }
             }
 
@@ -55,7 +55,7 @@ class StoreService(
 
         return stores.map { store ->
             val petIds = storeRepo.getPetIdsForStore(store.id)
-            val pets = petReadRepo.getPetsByIds(petIds)
+            val pets = petRepo.getPetsByIds(petIds)
             store.copy(inventory = pets)
         }
     }
