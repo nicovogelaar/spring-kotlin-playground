@@ -6,13 +6,34 @@ import com.nicovogelaar.playground.persistence.PetWriteRepository
 import org.springframework.stereotype.Service
 import java.util.UUID
 
+interface PetGetter {
+    fun getPetById(id: UUID): Pet?
+
+    fun listPets(): List<Pet>
+}
+
+interface PetCreator {
+    fun createPet(
+        name: String,
+        category: String,
+        status: String,
+    ): Pet?
+}
+
+interface PetUpdater {
+    fun updatePet(
+        id: UUID,
+        pet: Pet,
+    ): Pet?
+}
+
 @Service
 class PetService(
     // Using smaller interfaces for demo/testing purposes
     private val petReadRepo: PetReadRepository,
     private val petWriteRepo: PetWriteRepository,
-) {
-    fun createPet(
+) : PetGetter, PetCreator, PetUpdater {
+    override fun createPet(
         name: String,
         category: String,
         status: String,
@@ -27,15 +48,15 @@ class PetService(
         return petWriteRepo.createPet(pet)
     }
 
-    fun getPetById(id: UUID): Pet? {
+    override fun getPetById(id: UUID): Pet? {
         return petReadRepo.getPetById(id)
     }
 
-    fun getAllPets(): List<Pet> {
+    override fun listPets(): List<Pet> {
         return petReadRepo.getAllPets()
     }
 
-    fun updatePet(
+    override fun updatePet(
         id: UUID,
         pet: Pet,
     ): Pet? {

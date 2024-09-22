@@ -12,7 +12,7 @@
 curl -s -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
 -d '{
-  "query": "mutation { createPet(name: \"Buddy\", category: \"Dog\", status: \"Available\") { id name category status } }"
+  "query": "mutation { createPet(input: { name: \"Buddy\", category: \"Dog\", status: \"Available\" }) { id name category status } }"
 }' --verbose
 ```
 
@@ -22,7 +22,7 @@ curl -s -X POST http://localhost:8080/graphql \
 curl -s -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
 -d '{
-  "query": "mutation { updatePet(id: \"PET_ID\", name: \"Max\", category: \"Dog\", status: \"Adopted\") { id name category status } }"
+  "query": "mutation { updatePet(id: \"PET_ID\", input: { name: \"Max\", category: \"Dog\", status: \"Adopted\" }) { id name category status } }"
 }' --verbose
 ```
 
