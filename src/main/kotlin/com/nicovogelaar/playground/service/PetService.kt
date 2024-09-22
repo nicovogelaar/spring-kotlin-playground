@@ -8,6 +8,7 @@ import java.util.UUID
 
 @Service
 class PetService(
+    // Using smaller interfaces for demo/testing purposes
     private val petReadRepo: PetReadRepository,
     private val petWriteRepo: PetWriteRepository,
 ) {
