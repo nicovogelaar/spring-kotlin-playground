@@ -17,13 +17,13 @@ object PetMapper {
 
     fun toPetModel(
         id: UUID,
-        apiPet: ApiPetUpdate,
+        apiPetUpdate: ApiPetUpdate,
     ): Pet {
         return Pet(
             id = id,
-            name = apiPet.name,
-            category = apiPet.category,
-            status = apiPet.status,
+            name = apiPetUpdate.name,
+            category = apiPetUpdate.category,
+            status = apiPetUpdate.status,
         )
     }
 }
