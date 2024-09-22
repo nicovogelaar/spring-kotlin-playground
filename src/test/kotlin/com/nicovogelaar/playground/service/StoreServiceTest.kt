@@ -2,8 +2,8 @@ package com.nicovogelaar.playground.service
 
 import com.nicovogelaar.playground.model.DraftOrder
 import com.nicovogelaar.playground.model.Pet
-import com.nicovogelaar.playground.persistence.inmemory.InMemoryPetRepository
-import com.nicovogelaar.playground.persistence.inmemory.InMemoryStoreRepository
+import com.nicovogelaar.playground.persistence.InMemoryPetRepository
+import com.nicovogelaar.playground.persistence.InMemoryStoreRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue

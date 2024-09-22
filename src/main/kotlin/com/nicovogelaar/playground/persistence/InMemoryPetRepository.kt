@@ -1,8 +1,6 @@
-package com.nicovogelaar.playground.persistence.inmemory
+package com.nicovogelaar.playground.persistence
 
 import com.nicovogelaar.playground.model.Pet
-import com.nicovogelaar.playground.persistence.PetReadRepository
-import com.nicovogelaar.playground.persistence.PetWriteRepository
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.util.UUID
@@ -56,7 +54,7 @@ class InMemoryPetRepository : PetReadRepository, PetWriteRepository {
     }
 }
 
-data class PetEntity(
+private data class PetEntity(
     val id: UUID,
     val name: String,
     val category: String,

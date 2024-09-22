@@ -1,7 +1,6 @@
-package com.nicovogelaar.playground.persistence.inmemory
+package com.nicovogelaar.playground.persistence
 
 import com.nicovogelaar.playground.model.Store
-import com.nicovogelaar.playground.persistence.StoreRepository
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.util.UUID
@@ -71,7 +70,7 @@ class InMemoryStoreRepository : StoreRepository {
     }
 }
 
-data class StoreEntity(
+private data class StoreEntity(
     val id: UUID,
     val name: String,
     val location: String,
