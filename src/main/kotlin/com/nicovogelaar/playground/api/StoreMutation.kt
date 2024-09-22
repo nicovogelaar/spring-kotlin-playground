@@ -2,11 +2,12 @@ package com.nicovogelaar.playground.api
 
 import com.expediagroup.graphql.generator.annotations.GraphQLDescription
 import com.expediagroup.graphql.server.operations.Mutation
+import com.nicovogelaar.playground.api.mapper.OrderMapper
 import com.nicovogelaar.playground.api.mapper.StoreMapper
+import com.nicovogelaar.playground.api.model.Order
 import com.nicovogelaar.playground.api.model.Store
 import com.nicovogelaar.playground.api.model.StoreCreate
 import com.nicovogelaar.playground.api.model.StoreUpdate
-import com.nicovogelaar.playground.model.Order
 import com.nicovogelaar.playground.service.OrderPlacer
 import com.nicovogelaar.playground.service.PetGetter
 import com.nicovogelaar.playground.service.StoreCreator
@@ -34,6 +35,7 @@ class StoreMutation(
         input: StoreUpdate,
     ): Store? {
         val store = StoreMapper.toStoreModel(id, input)
+
         return storeUpdater.updateStore(id, store)?.let { StoreMapper.toApiStore(it) }
     }
 
@@ -44,6 +46,7 @@ class StoreMutation(
     ): Store? {
         val store = storeGetter.getStoreById(storeId) ?: return null
         val pet = petGetter.getPetById(petId) ?: return null
+
         return storeUpdater.addPetToStore(store, pet)?.let { StoreMapper.toApiStore(it) }
     }
 
@@ -54,6 +57,7 @@ class StoreMutation(
     ): Store? {
         val store = storeGetter.getStoreById(storeId) ?: return null
         val pet = petGetter.getPetById(petId) ?: return null
+
         return storeUpdater.removePetFromStore(store, pet)?.let { StoreMapper.toApiStore(it) }
     }
 
@@ -61,10 +65,12 @@ class StoreMutation(
     fun placeOrder(
         storeId: UUID,
         petId: UUID,
-    ): Boolean {
-        val store = storeGetter.getStoreById(storeId) ?: return false
-        val pet = petGetter.getPetById(petId) ?: return false
-        val order = Order(store, pet)
-        return orderPlacer.placeOrder(order)
+    ): Order? {
+        val store = storeGetter.getStoreById(storeId) ?: return null
+        val pet = petGetter.getPetById(petId) ?: return null
+
+        val draftOrder = OrderMapper.toDraftOrder(store, pet)
+
+        return orderPlacer.placeOrder(draftOrder)?.let { OrderMapper.toApiOrder(it) }
     }
 }

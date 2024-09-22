@@ -1,6 +1,6 @@
 package com.nicovogelaar.playground.service
 
-import com.nicovogelaar.playground.model.Order
+import com.nicovogelaar.playground.model.DraftOrder
 import com.nicovogelaar.playground.model.Pet
 import com.nicovogelaar.playground.persistence.inmemory.InMemoryPetRepository
 import com.nicovogelaar.playground.persistence.inmemory.InMemoryStoreRepository
@@ -66,11 +66,11 @@ class StoreServiceTest {
         storeService.addPetToStore(createdStore!!, pet)
 
         // When
-        val order = Order(store = createdStore, pet = pet)
+        val order = DraftOrder(createdStore, pet)
         val orderPlaced = storeService.placeOrder(order)
 
         // Then
-        assertTrue(orderPlaced, "Order should be placed successfully")
+        assertNotNull(orderPlaced, "Order should be placed successfully")
 
         // Verify the pet is removed from the store's inventory
         val updatedStore = storeService.getStoreById(createdStore.id)

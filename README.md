@@ -162,6 +162,6 @@ curl -X POST http://localhost:8080/graphql \
 curl -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
 -d '{
-  "query": "mutation { placeOrder(storeId: \"<STORE_ID>\", petId: \"<PET_ID>\") }"
+  "query": "mutation { placeOrder(storeId: \"<STORE_ID>\", petId: \"<PET_ID>\") { id store { id name location } pet { id name category } } }"
 }'
 ```

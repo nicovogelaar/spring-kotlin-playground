@@ -1,5 +1,6 @@
 package com.nicovogelaar.playground.service
 
+import com.nicovogelaar.playground.model.DraftOrder
 import com.nicovogelaar.playground.model.Order
 import com.nicovogelaar.playground.model.Pet
 import com.nicovogelaar.playground.model.Store
@@ -39,7 +40,7 @@ interface StoreUpdater {
 }
 
 interface OrderPlacer {
-    fun placeOrder(order: Order): Boolean
+    fun placeOrder(order: DraftOrder): Order?
 }
 
 @Service
@@ -107,15 +108,16 @@ class StoreService(
         return getStoreById(store.id)
     }
 
-    override fun placeOrder(order: Order): Boolean {
+    override fun placeOrder(order: DraftOrder): Order? {
         val inventory = getInventoryForStore(order.store.id)
 
         if (!inventory.any { it.id == order.pet.id }) {
-            return false
+            return null
         }
 
         removePetFromStore(order.store, order.pet)
-        return true
+
+        return Order(UUID.randomUUID(), order.store, order.pet)
     }
 
     private fun getInventoryForStore(storeId: UUID): List<Pet> {
