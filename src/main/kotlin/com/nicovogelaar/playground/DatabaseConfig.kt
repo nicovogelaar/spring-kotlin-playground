@@ -1,6 +1,8 @@
 package com.nicovogelaar.playground
 
 import com.nicovogelaar.playground.persistence.PetTable
+import com.nicovogelaar.playground.persistence.StorePetTable
+import com.nicovogelaar.playground.persistence.StoreTable
 import jakarta.annotation.PostConstruct
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -27,6 +29,8 @@ class DatabaseConfig {
     fun createTables() {
         transaction {
             SchemaUtils.create(PetTable)
+            SchemaUtils.create(StoreTable)
+            SchemaUtils.create(StorePetTable)
         }
     }
 }

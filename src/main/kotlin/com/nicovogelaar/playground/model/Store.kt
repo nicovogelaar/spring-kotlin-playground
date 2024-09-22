@@ -2,9 +2,9 @@ package com.nicovogelaar.playground.model
 
 import java.util.UUID
 
-data class Pet(
+data class Store(
     val id: UUID,
     val name: String,
-    val category: String,
-    val status: String,
+    val location: String,
+    val inventory: List<Pet>,
 )

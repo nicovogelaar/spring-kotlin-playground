@@ -65,3 +65,63 @@ curl -s -X POST http://localhost:8080/graphql \
   "query": "query { pets { id name category status } }"
 }' | jq .
 ```
+
+## Get Store
+
+```shell
+curl -s -X POST http://localhost:8080/graphql \
+-H "Content-Type: application/json" \
+-d '{
+  "query": "query { store(id: \"<STORE_ID>\") { id name location inventory { id name} } }"
+}' | jq .
+```
+
+## List All Stores
+
+```shell
+curl -s -X POST http://localhost:8080/graphql \
+-H "Content-Type: application/json" \
+-d '{
+  "query": "query { stores { id name location inventory { id name} } }"
+}' | jq .
+```
+
+## Create a New Store
+
+```shell
+curl -X POST http://localhost:8080/graphql \
+-H "Content-Type: application/json" \
+-d '{
+  "query": "mutation { createStore(input: { name: \"My Store\", location: \"123 Main St\" }) { id name location } }"
+}'
+```
+
+## Update an Existing Store
+
+```shell
+curl -X POST http://localhost:8080/graphql \
+-H "Content-Type: application/json" \
+-d '{
+  "query": "mutation { updateStore(id: \"<STORE_ID>\", input: { name: \"Updated Store\", location: \"456 Elm St\" }) { id name location } }"
+}'
+```
+
+## Add a Pet to a Store
+
+```shell
+curl -X POST http://localhost:8080/graphql \
+-H "Content-Type: application/json" \
+-d '{
+  "query": "mutation { addPetToStore(storeId: \"<STORE_ID>\", petId: \"<PET_ID>\") { id name location } }"
+}'
+```
+
+## Remove a Pet from a Store
+
+```shell
+curl -X POST http://localhost:8080/graphql \
+-H "Content-Type: application/json" \
+-d '{
+  "query": "mutation { removePetFromStore(storeId: \"<STORE_ID>\", petId: \"<PET_ID>\") { id name location } }"
+}'
+```

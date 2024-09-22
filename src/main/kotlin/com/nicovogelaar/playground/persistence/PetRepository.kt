@@ -12,6 +12,8 @@ import java.util.UUID
 interface PetReadRepository {
     fun getPetById(id: UUID): Pet?
 
+    fun getPetsByIds(ids: List<UUID>): List<Pet>
+
     fun getAllPets(): List<Pet>
 }
 
@@ -68,11 +70,24 @@ class ExposedPetRepository : PetReadRepository, PetWriteRepository {
                         name = row[PetTable.name],
                         category = row[PetTable.category],
                         status = row[PetTable.status],
-                        createdAt = row[PetTable.createdAt],
-                        updatedAt = row[PetTable.updatedAt],
                     )
                 }
                 .singleOrNull()
+        }
+    }
+
+    override fun getPetsByIds(ids: List<UUID>): List<Pet> {
+        return transaction {
+            PetTable
+                .selectAll().where { PetTable.id inList ids }
+                .mapNotNull { row ->
+                    Pet(
+                        id = row[PetTable.id],
+                        name = row[PetTable.name],
+                        category = row[PetTable.category],
+                        status = row[PetTable.status],
+                    )
+                }
         }
     }
 
@@ -84,8 +99,6 @@ class ExposedPetRepository : PetReadRepository, PetWriteRepository {
                     name = row[PetTable.name],
                     category = row[PetTable.category],
                     status = row[PetTable.status],
-                    createdAt = row[PetTable.createdAt],
-                    updatedAt = row[PetTable.updatedAt],
                 )
             }
         }
