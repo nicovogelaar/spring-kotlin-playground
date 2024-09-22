@@ -1,5 +1,31 @@
 # spring-kotlin-playground
 
+## Project Structure
+
+| Folder                 | Description                                                                                     |
+|-----------------------|-------------------------------------------------------------------------------------------------|
+| `api/`                | Contains GraphQL queries and mutations, serving as the entry point for API requests.           |
+| `api/model/`         | Defines data transfer objects (DTOs) for creating and updating pets, ensuring structured data handling. |
+| `api/mapper/`        | Contains mappers that convert between domain models and API models for consistent data representation. |
+| `model/`             | Contains the domain models representing the business logic of the application, such as `Pet`.        |
+| `service/`           | Contains service classes that encapsulate business logic, such as handling pet creation, updates, and retrieval. |
+| `persistence/`       | Manages data access, including repositories and database table definitions for interacting with the underlying database. |
+
+## Data Flow: API to Database
+
+```plaintext
++------------------+              +------------------+              +---------------------+              +---------------------+
+|     API Layer    |              |  Service Layer   |              |  Persistence Layer  |              |     Database        |
+|  (GraphQL Query, |              |   (PetService)   |              |  (PetRepository,    |              |   (PetTable)        |
+|  Mutation)       |              |                  |              |   PetTable)         |              |                     |
+|------------------|              |------------------|              |---------------------|              |---------------------|
+|  1. Incoming     |   invokes    | 2. Business      |   invokes    | 3. Repository       |  executes    | 4. Data persisted   |
+|     API request  +------------> |    Logic         +------------> |    interacts with   +------------> |    in the database  |
+|     (createPet,  |              |    (PetService)  |              |    database entity  |              |  (INSERT/UPDATE)    |
+|     updatePet)   |              |                  |              |                     |              |                     |
++------------------+              +------------------+              +---------------------+              +---------------------+
+```
+
 ## Create Pet
 
 ```shell
