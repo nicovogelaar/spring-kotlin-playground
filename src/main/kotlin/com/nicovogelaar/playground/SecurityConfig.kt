@@ -14,7 +14,7 @@ class SecurityConfig {
         return http
             .authorizeExchange { exchanges ->
                 exchanges
-                    .pathMatchers("/hello").permitAll()
+                    .pathMatchers("/hello", "/graphql").permitAll()
                     .anyExchange().authenticated()
             }
             .csrf { csrfSpec -> csrfSpec.disable() }

@@ -3,3 +3,7 @@ spring:
     name: playground
   main:
     web-application-type: reactive
+
+graphql:
+  packages:
+    - com.nicovogelaar.playground

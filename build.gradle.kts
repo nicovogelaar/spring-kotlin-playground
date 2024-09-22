@@ -19,10 +19,15 @@ repositories {
     mavenCentral()
 }
 
+val graphqlVersion = "7.1.5"
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("com.expediagroup:graphql-kotlin-spring-server:$graphqlVersion")
+    implementation("com.expediagroup:graphql-kotlin-hooks-provider:$graphqlVersion")
+    implementation("com.expediagroup:graphql-kotlin-schema-generator:$graphqlVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
