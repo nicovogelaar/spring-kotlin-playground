@@ -9,8 +9,8 @@ object PetTable : Table() {
     val name = varchar("name", 100)
     val category = varchar("category", 100)
     val status = varchar("status", 20)
-    val createdAt = datetime("created_at").clientDefault { LocalDateTime.now() }
-    val updatedAt = datetime("updated_at").clientDefault { LocalDateTime.now() }
+    val createdAt = datetime("created_at").default(LocalDateTime.now())
+    val updatedAt = datetime("updated_at").default(LocalDateTime.now())
 
     override val primaryKey = PrimaryKey(id)
 }
