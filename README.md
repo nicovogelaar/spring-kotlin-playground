@@ -26,6 +26,36 @@
 +------------------+              +------------------+              +---------------------+              +---------------------+
 ```
 
+## Database Configuration
+
+This project supports using H2 in-memory database for local testing and PostgreSQL for production. You can easily switch between them by modifying the `application.yml` file.
+
+### H2 Database (Local Testing)
+
+To use the H2 database for local testing, ensure the following configuration is set in your `application.yml`:
+
+```yaml
+datasource:
+  url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  driver-class-name: org.h2.Driver
+  username: sa
+  password:
+```
+
+### PostgreSQL Database (Production)
+
+For production use, you can configure PostgreSQL in your `application.yml` as follows:
+
+```yaml
+datasource:
+  url: jdbc:postgresql://localhost:5432/postgres
+  driver-class-name: org.postgresql.Driver
+  username: postgres
+  password: postgres
+```
+
+Make sure to replace the placeholder values (localhost, 5432, postgres, postgres) with your actual PostgreSQL connection details.
+
 ## Create Pet
 
 ```shell
