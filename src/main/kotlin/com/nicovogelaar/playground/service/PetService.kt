@@ -3,6 +3,7 @@ package com.nicovogelaar.playground.service
 import com.nicovogelaar.playground.model.Pet
 import com.nicovogelaar.playground.persistence.PetReadRepository
 import com.nicovogelaar.playground.persistence.PetWriteRepository
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -26,6 +27,8 @@ interface PetUpdater {
         pet: Pet,
     ): Pet?
 }
+
+private val logger = KotlinLogging.logger {}
 
 @Service
 class PetService(
@@ -53,6 +56,7 @@ class PetService(
     }
 
     override fun listPets(): List<Pet> {
+        logger.info { "Get all pets..." }
         return petReadRepo.getAllPets()
     }
 
