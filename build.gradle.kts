@@ -27,7 +27,6 @@ val jodaVersion = "2.13.0"
 val jjwtVersion = "0.11.5"
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
