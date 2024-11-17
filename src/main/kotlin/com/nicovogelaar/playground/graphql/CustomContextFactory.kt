@@ -12,21 +12,22 @@ import kotlin.coroutines.CoroutineContext
 
 @Component
 class CustomContextFactory : DefaultSpringGraphQLContextFactory() {
-
     override suspend fun generateContext(request: ServerRequest): GraphQLContext {
         val correlationId = request.headers().firstHeader("X-Correlation-ID") ?: UUID.randomUUID().toString()
 
         val originalMdcContext = MDC.getCopyOfContextMap() ?: emptyMap()
 
-        val newMdcContext = originalMdcContext.toMutableMap().apply {
-            put("correlationId", correlationId)
-        }
+        val newMdcContext =
+            originalMdcContext.toMutableMap().apply {
+                put("correlationId", correlationId)
+            }
 
         MDC.setContextMap(newMdcContext)
 
-        val context = mapOf(
-            CoroutineContext::class to MDCContext()
-        ).toGraphQLContext()
+        val context =
+            mapOf(
+                CoroutineContext::class to MDCContext(),
+            ).toGraphQLContext()
 
         MDC.setContextMap(originalMdcContext)
 

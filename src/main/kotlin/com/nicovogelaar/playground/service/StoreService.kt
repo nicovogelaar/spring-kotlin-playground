@@ -6,51 +6,60 @@ import com.nicovogelaar.playground.model.Pet
 import com.nicovogelaar.playground.model.Store
 import com.nicovogelaar.playground.persistence.PetReadRepository
 import com.nicovogelaar.playground.persistence.StoreRepository
+import com.nicovogelaar.playground.security.getUserRoles
+import mu.KotlinLogging
+import org.springframework.security.core.context.ReactiveSecurityContextHolder
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 interface StoreGetter {
-    fun getStoreById(id: UUID): Store?
+    suspend fun getStoreById(id: UUID): Store?
 
-    fun listStores(): List<Store>
+    suspend fun listStores(): List<Store>
 }
 
 interface StoreCreator {
-    fun createStore(
+    suspend fun createStore(
         name: String,
         location: String,
     ): Store?
 }
 
 interface StoreUpdater {
-    fun updateStore(
+    suspend fun updateStore(
         id: UUID,
         store: Store,
     ): Store?
 
-    fun addPetToStore(
+    suspend fun addPetToStore(
         store: Store,
         pet: Pet,
     ): Store?
 
-    fun removePetFromStore(
+    suspend fun removePetFromStore(
         store: Store,
         pet: Pet,
     ): Store?
 }
 
 interface OrderPlacer {
-    fun placeOrder(order: DraftOrder): Order?
+    suspend fun placeOrder(order: DraftOrder): Order?
 }
+
+private val logger = KotlinLogging.logger {}
 
 @Service
 class StoreService(
     private val storeRepo: StoreRepository,
     private val petRepo: PetReadRepository,
 ) : StoreGetter, StoreCreator, StoreUpdater, OrderPlacer {
-    override fun getStoreById(id: UUID): Store? = storeRepo.getStoreById(id)?.copy(inventory = getInventoryForStore(id))
+    override suspend fun getStoreById(id: UUID): Store? = storeRepo.getStoreById(id)?.copy(inventory = getInventoryForStore(id))
 
-    override fun listStores(): List<Store> {
+    override suspend fun listStores(): List<Store> {
+        val roles = ReactiveSecurityContextHolder.getContext().getUserRoles()
+
+        logger.debug { "roles: $roles" }
+
         val stores = storeRepo.getAllStores()
 
         return stores.map { store ->
@@ -60,7 +69,7 @@ class StoreService(
         }
     }
 
-    override fun createStore(
+    override suspend fun createStore(
         name: String,
         location: String,
     ): Store? {
@@ -75,7 +84,7 @@ class StoreService(
         return storeRepo.createStore(newStore)
     }
 
-    override fun updateStore(
+    override suspend fun updateStore(
         id: UUID,
         store: Store,
     ): Store? {
@@ -90,7 +99,7 @@ class StoreService(
         return storeRepo.updateStore(id, updatedStore)
     }
 
-    override fun addPetToStore(
+    override suspend fun addPetToStore(
         store: Store,
         pet: Pet,
     ): Store? {
@@ -99,7 +108,7 @@ class StoreService(
         return getStoreById(store.id)
     }
 
-    override fun removePetFromStore(
+    override suspend fun removePetFromStore(
         store: Store,
         pet: Pet,
     ): Store? {
@@ -108,7 +117,7 @@ class StoreService(
         return getStoreById(store.id)
     }
 
-    override fun placeOrder(order: DraftOrder): Order? {
+    override suspend fun placeOrder(order: DraftOrder): Order? {
         val inventory = getInventoryForStore(order.store.id)
 
         if (!inventory.any { it.id == order.pet.id }) {

@@ -11,12 +11,12 @@ import java.util.UUID
 @Component
 class StoreQuery(private val storeGetter: StoreGetter) : Query {
     @GraphQLDescription("Fetch a store by its ID")
-    fun store(id: UUID): Store? {
+    suspend fun store(id: UUID): Store? {
         return storeGetter.getStoreById(id)?.let { StoreMapper.toApiStore(it) }
     }
 
     @GraphQLDescription("Get a list of all stores")
-    fun stores(): List<Store> {
+    suspend fun stores(): List<Store> {
         return storeGetter.listStores().map { StoreMapper.toApiStore(it) }
     }
 }

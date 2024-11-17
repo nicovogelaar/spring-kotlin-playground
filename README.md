@@ -61,6 +61,7 @@ Make sure to replace the placeholder values (localhost, 5432, postgres, postgres
 ```shell
 curl -s -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
 -d '{
   "query": "mutation { createPet(input: { name: \"Buddy\", category: \"Dog\", status: \"Available\" }) { id name category status } }"
 }' --verbose
@@ -71,6 +72,7 @@ curl -s -X POST http://localhost:8080/graphql \
 ```shell
 curl -s -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
 -d '{
   "query": "mutation { updatePet(id: \"PET_ID\", input: { name: \"Max\", category: \"Dog\", status: \"Adopted\" }) { id name category status } }"
 }' --verbose
@@ -81,6 +83,7 @@ curl -s -X POST http://localhost:8080/graphql \
 ```shell
 curl -s -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
 -d '{
   "query": "query { pet(id: \"PET_ID\") { id name category status } }"
 }' | jq .
@@ -91,6 +94,7 @@ curl -s -X POST http://localhost:8080/graphql \
 ```shell
 curl -s -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
 -d '{
   "query": "query { pets { id name category status } }"
 }' | jq .
@@ -101,6 +105,7 @@ curl -s -X POST http://localhost:8080/graphql \
 ```shell
 curl -s -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
 -d '{
   "query": "query { store(id: \"<STORE_ID>\") { id name location inventory { id name} } }"
 }' | jq .
@@ -111,6 +116,7 @@ curl -s -X POST http://localhost:8080/graphql \
 ```shell
 curl -s -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
 -d '{
   "query": "query { stores { id name location inventory { id name} } }"
 }' | jq .
@@ -121,6 +127,7 @@ curl -s -X POST http://localhost:8080/graphql \
 ```shell
 curl -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
 -d '{
   "query": "mutation { createStore(input: { name: \"My Store\", location: \"123 Main St\" }) { id name location } }"
 }'
@@ -131,6 +138,7 @@ curl -X POST http://localhost:8080/graphql \
 ```shell
 curl -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
 -d '{
   "query": "mutation { updateStore(id: \"<STORE_ID>\", input: { name: \"Updated Store\", location: \"456 Elm St\" }) { id name location } }"
 }'
@@ -141,6 +149,7 @@ curl -X POST http://localhost:8080/graphql \
 ```shell
 curl -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
 -d '{
   "query": "mutation { addPetToStore(storeId: \"<STORE_ID>\", petId: \"<PET_ID>\") { id name location } }"
 }'
@@ -151,6 +160,7 @@ curl -X POST http://localhost:8080/graphql \
 ```shell
 curl -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
 -d '{
   "query": "mutation { removePetFromStore(storeId: \"<STORE_ID>\", petId: \"<PET_ID>\") { id name location } }"
 }'
@@ -161,7 +171,19 @@ curl -X POST http://localhost:8080/graphql \
 ```shell
 curl -X POST http://localhost:8080/graphql \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <TOKEN>" \
 -d '{
   "query": "mutation { placeOrder(storeId: \"<STORE_ID>\", petId: \"<PET_ID>\") { id store { id name location } pet { id name category } } }"
 }'
+```
+
+## Login
+
+```shell
+curl -v -X POST http://localhost:8080/auth/login \
+-H "Content-Type: application/json" \
+-d '{
+    "username": "dummyUser",
+    "password": "dummyPassword"
+  }'
 ```

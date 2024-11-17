@@ -25,12 +25,12 @@ class StoreMutation(
     private val petGetter: PetGetter,
 ) : Mutation {
     @GraphQLDescription("Create a new store")
-    fun createStore(input: StoreCreate): Store? {
+    suspend fun createStore(input: StoreCreate): Store? {
         return storeCreator.createStore(input.name, input.location)?.let { StoreMapper.toApiStore(it) }
     }
 
     @GraphQLDescription("Update an existing store")
-    fun updateStore(
+    suspend fun updateStore(
         id: UUID,
         input: StoreUpdate,
     ): Store? {
@@ -40,7 +40,7 @@ class StoreMutation(
     }
 
     @GraphQLDescription("Add a pet to a store")
-    fun addPetToStore(
+    suspend fun addPetToStore(
         storeId: UUID,
         petId: UUID,
     ): Store? {
@@ -51,7 +51,7 @@ class StoreMutation(
     }
 
     @GraphQLDescription("Remove a pet from a store")
-    fun removePetFromStore(
+    suspend fun removePetFromStore(
         storeId: UUID,
         petId: UUID,
     ): Store? {
@@ -62,7 +62,7 @@ class StoreMutation(
     }
 
     @GraphQLDescription("Place an order for a pet in a store")
-    fun placeOrder(
+    suspend fun placeOrder(
         storeId: UUID,
         petId: UUID,
     ): Order? {
